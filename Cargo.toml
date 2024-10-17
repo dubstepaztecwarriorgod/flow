@@ -1,0 +1,18 @@
+[package]
+name = "flow"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bootloader = "0.9.8"
+
+[profile.dev]
+panic = "abort"
+test = false
+
+[profile.release]
+panic = "abort"
+test = false
+
+[features]
+default = []
