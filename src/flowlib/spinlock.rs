@@ -11,8 +11,6 @@ pub struct SpinGuard<'a, T> {
     lock: &'a SpinLock<T>,
 }
 
-unsafe impl<T> Sync for SpinLock<T> where T: Send {}
-
 impl<T> SpinLock<T> {
     pub const fn new(data: T) -> Self {
         Self {
@@ -20,6 +18,7 @@ impl<T> SpinLock<T> {
             data: UnsafeCell::new(data),
         }
     }
+
     pub fn lock(&self) -> SpinGuard<T> {
         while self.used.swap(true, Ordering::Acquire) {
             core::hint::spin_loop();
@@ -28,6 +27,9 @@ impl<T> SpinLock<T> {
         SpinGuard { lock: self }
     }
 }
+
+unsafe impl<T> Sync for SpinLock<T> {}
+unsafe impl<T> Send for SpinLock<T> {}
 
 impl<T> Deref for SpinGuard<'_, T> {
     type Target = T;

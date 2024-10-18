@@ -13,6 +13,7 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+    vga::VgaBuffer::new().print_str(b"meowwww");
     loop {
         
     }
